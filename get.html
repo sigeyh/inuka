@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to INUKA</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  
+  <!-- iOS PWA Support -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Landing Page">
+
+  <!-- Favicon & App Icon -->
+  <link rel="icon" type="image/png" href="download-removebg-preview (10).png">
+  <link rel="apple-touch-icon" href="download-removebg-preview (10).png">
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="get.css">
+</head>
+<body>
+
+  <div class="container">
+    <!-- Logo Section -->
+    <img src="download-removebg-preview (10).png" alt="Logo" class="logo">
+
+    <!-- Welcome Title -->
+    <h1>Welcome to Our INUKA</h1>
+
+    <!-- Steps Section -->
+    <div class="steps">
+      <p>Follow these steps to get started:</p>
+      <ol>
+        <li>Create an account</li>
+        <li>Verify your phone number</li>
+        <li>Access your dashboard</li>
+      </ol>
+    </div>
+
+    <!-- Register Button -->
+    <a href="register.html" class="button">Get Started</a>
+  </div>
+
+  <!-- Service Worker for PWA -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('Service Worker Registered!', reg))
+          .catch(err => console.log('Service Worker Registration Failed:', err));
+      });
+    }
+  </script>
+
+</body>
+</html>
