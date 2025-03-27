@@ -1,8 +1,8 @@
 const CACHE_NAME = 'landing-page-cache-v1';
 const urlsToCache = [
-  'index.html',
-  'styles.css',
-  'logo.png'
+  'get.html',
+  'get.css',
+  'download-removebg-preview (10).png.png'
 ];
 
 self.addEventListener('install', event => {
