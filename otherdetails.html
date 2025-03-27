@@ -155,15 +155,33 @@
 
   <script>
     document.getElementById("submitButton").addEventListener("click", function() {
-      // Show the overlay with the GIF
+      const form = document.getElementById("referralForm");
       const overlay = document.getElementById("overlay");
-      overlay.classList.add("show");
+      const inputs = form.querySelectorAll("input[required], select[required]");
+      let isValid = true;
 
-      // Wait 2 seconds before redirecting
+      // Check if all required fields are filled
+      inputs.forEach(input => {
+        if (!input.value.trim()) {
+          isValid = false;
+          input.style.border = "2px solid red"; // Highlight empty fields
+        } else {
+          input.style.border = "1px solid #ccc"; // Reset border if filled
+        }
+      });
+
+      if (!isValid) {
+        alert("Please fill in all required fields before proceeding.");
+        return;
+      }
+
+      // Show overlay and redirect after validation
+      overlay.classList.add("show");
       setTimeout(function() {
         window.location.href = "checklimit.html";
       }, 2000);
     });
-  </script>
+</script>
+
 </body>
 </html>
