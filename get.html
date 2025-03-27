@@ -3,19 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome to INUKA</title>
+  <meta name="description" content="A fast and lightweight Progressive Web App (PWA) for your platform.">
+  <meta name="keywords" content="PWA, Landing Page, Web App, Mobile App">
+  <meta name="author" content="Your Name">
+
+  <!-- Open Graph Meta Tags for Social Media Preview -->
+  <meta property="og:title" content="Welcome to Our Platform">
+  <meta property="og:description" content="A seamless and mobile-friendly PWA experience.">
+  <meta property="og:image" content="download-removebg-preview (10).png.png">
+  <meta property="og:url" content="https://your-vercel-app.vercel.app/">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <title>Welcome to Our Platform</title>
 
   <!-- PWA Manifest -->
-  <link rel="manifest" href="manifest.json">
-  
+  <link rel="manifest" href="/manifest.json">
+
   <!-- iOS PWA Support -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Landing Page">
+  <link rel="apple-touch-icon" href="download-removebg-preview (10).png.png">
 
-  <!-- Favicon & App Icon -->
-  <link rel="icon" type="image/png" href="download-removebg-preview (10).png">
-  <link rel="apple-touch-icon" href="download-removebg-preview (10).png">
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.ico">
 
   <!-- External CSS -->
   <link rel="stylesheet" href="get.css">
@@ -24,10 +35,10 @@
 
   <div class="container">
     <!-- Logo Section -->
-    <img src="download-removebg-preview (10).png" alt="Logo" class="logo">
+    <img src="download-removebg-preview (10).png.png" alt="Logo" class="logo">
 
     <!-- Welcome Title -->
-    <h1>Welcome to Our INUKA</h1>
+    <h1>Welcome to Our Platform</h1>
 
     <!-- Steps Section -->
     <div class="steps">
@@ -47,7 +58,7 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js')
+        navigator.serviceWorker.register('/service-worker.js')
           .then(reg => console.log('Service Worker Registered!', reg))
           .catch(err => console.log('Service Worker Registration Failed:', err));
       });
